@@ -1,34 +1,35 @@
 <template>
   <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        Payment_Isjeady
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+    <div v-if="loading" class="text-4xl">
+      Loading...
+    </div>
+    <div v-else class="text-4xl">
+      <div
+        v-for="product in products"
+        :key="product.id"
+        class="flex inline-flex gap-4 m-8"
+      >
+        <Product :product="product" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      loading: true,
+      products: []
+    }
+  },
+  async mounted () {
+    this.loading = true
+    const response = await this.$axios.$get('/api/products')
+    this.products = response.data
+    this.loading = false
+  }
+}
 </script>
 
 <style>
